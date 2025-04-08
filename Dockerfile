@@ -1,19 +1,20 @@
-# Usa una imagen base de Maven para construir el proyecto
-FROM maven:3.8.5-openjdk-8 AS build
+#Usar una imagen base de Node.js
+FROM node:18
+
+#Establecer el directorio de trabajo dentro del contenedor
 WORKDIR /app
 
-# Copia el código fuente al contenedor
+#Copiar package.json y package-lock.json para instalar dependencias
+COPY package*.json ./
+
+#Instalar dependencias
+RUN npm install
+
+#Copiar el resto de los archivos
 COPY . .
 
-# Construye el proyecto y genera el archivo JAR
-RUN mvn clean package -DskipTests
+#Exponer el puerto en el que corre el servicio
+EXPOSE 5001
 
-# Usa una imagen base de Java para ejecutar el JAR
-FROM openjdk:8-jdk-alpine
-WORKDIR /app
-
-# Copia el archivo JAR generado desde la etapa de construcción
-COPY --from=build /app/target/*.jar app.jar
-
-# Comando para ejecutar la aplicación
-ENTRYPOINT ["java", "-jar", "app.jar"]
+#Comando para iniciar la aplicación
+CMD ["node", "index.js"]

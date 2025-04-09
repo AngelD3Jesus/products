@@ -1,6 +1,7 @@
 import express from "express";
 import {
   getProducts,
+  getProductById,
   createProduct,
   updateProduct,
   deleteProduct,
@@ -26,6 +27,27 @@ const router = express.Router();
  *         description: Lista de productos
  */
 router.get("/all", getProducts);
+
+/**
+ * @swagger
+ * /app/products/{id}:
+ *   get:
+ *     summary: Obtener un producto por ID
+ *     tags: [Products]
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         schema:
+ *           type: string
+ *         description: ID del producto
+ *     responses:
+ *       200:
+ *         description: Producto encontrado
+ *       404:
+ *         description: Producto no encontrado
+ */
+router.get("/:id", getProductById); // ✅ NUEVA RUTA
 
 /**
  * @swagger
